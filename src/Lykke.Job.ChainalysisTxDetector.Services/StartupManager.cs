@@ -22,7 +22,7 @@ namespace Lykke.Job.ChainalysisTxDetector.Services
 
         public async Task StartAsync()
         {
-            // TODO: Implement your startup logic here. Good idea is to log every step
+            await _log.WriteInfoAsync(nameof(StartupManager), "Service start", "Completed");
 
             await Task.CompletedTask;
         }

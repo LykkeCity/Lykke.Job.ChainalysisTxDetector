@@ -6,5 +6,7 @@ namespace Lykke.Job.ChainalysisTxDetector.Settings.JobSettings
     {
         [AzureTableCheck]
         public string LogsConnString { get; set; }
+        [AzureTableCheck]
+        public string DataConnString { get; set; }
     }
 }

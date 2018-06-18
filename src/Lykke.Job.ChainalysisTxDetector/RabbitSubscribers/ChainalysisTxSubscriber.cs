@@ -3,27 +3,33 @@ using System.Threading.Tasks;
 using Autofac;
 using Common;
 using Common.Log;
+using Lykke.Job.ChainalysisTxDetector.Core.Services;
 using Lykke.Job.ChainalysisTxDetector.IncomingMessages;
 using Lykke.RabbitMqBroker;
 using Lykke.RabbitMqBroker.Subscriber;
 
 namespace Lykke.Job.ChainalysisTxDetector.RabbitSubscribers
 {
-    public class MyRabbitSubscriber : IStartable, IStopable
+    public class ChainalysisTxSubscriber : IStartable, IStopable
     {
         private readonly ILog _log;
         private readonly string _connectionString;
         private readonly string _exchangeName;
-        private RabbitMqSubscriber<MySubscribedMessage> _subscriber;
+        private RabbitMqSubscriber<ChainalisysCashMessage> _subscriber;
+        private IChainalysisTxService _chainalysisTxService;
 
-        public MyRabbitSubscriber(
+        public ChainalysisTxSubscriber(
             ILog log,
             string connectionString,
-            string exchangeName)
+            string exchangeName,
+            IChainalysisTxService chainalysisTxService   
+        )
         {
-            _log = log;
-            _connectionString = connectionString;
-            _exchangeName = exchangeName;
+            _log = log ?? throw new ArgumentNullException(nameof(log));
+            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+            _exchangeName = exchangeName ?? throw new ArgumentNullException(nameof(exchangeName));
+            _chainalysisTxService = chainalysisTxService ?? throw new ArgumentNullException(nameof(chainalysisTxService));
+
         }
 
         public void Start()
@@ -36,11 +42,11 @@ namespace Lykke.Job.ChainalysisTxDetector.RabbitSubscribers
             // TODO: Make additional configuration, using fluent API here:
             // ex: .MakeDurable()
 
-            _subscriber = new RabbitMqSubscriber<MySubscribedMessage>(settings,
+            _subscriber = new RabbitMqSubscriber<ChainalisysCashMessage>(settings,
                     new ResilientErrorHandlingStrategy(_log, settings,
                         retryTimeout: TimeSpan.FromSeconds(10),
                         next: new DeadQueueErrorHandlingStrategy(_log, settings)))
-                .SetMessageDeserializer(new JsonMessageDeserializer<MySubscribedMessage>())
+                .SetMessageDeserializer(new JsonMessageDeserializer<ChainalisysCashMessage>())
                 .Subscribe(ProcessMessageAsync)
                 .CreateDefaultBinding()
                 .SetLogger(_log)
@@ -48,12 +54,9 @@ namespace Lykke.Job.ChainalysisTxDetector.RabbitSubscribers
                 .Start();
         }
 
-        private async Task ProcessMessageAsync(MySubscribedMessage arg)
+        private async Task ProcessMessageAsync(ChainalisysCashMessage arg)
         {
-            // TODO: Orchestrate execution flow here and delegate actual business logic implementation to services layer
-            // Do not implement actual business logic here
-
-            await Task.CompletedTask;
+            await _chainalysisTxService.StoreRecord(arg);
         }
 
         public void Dispose()

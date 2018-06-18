@@ -60,7 +60,7 @@ namespace Lykke.Job.ChainalysisTxDetector.Modules
         {
             // TODO: You should register each subscriber in DI container as IStartable singleton and autoactivate it
 
-            builder.RegisterType<MyRabbitSubscriber>()
+            builder.RegisterType<ChainalysisTxSubscriber>()
                 .As<IStartable>()
                 .AutoActivate()
                 .SingleInstance()
