@@ -7,6 +7,9 @@ using Lykke.Job.ChainalysisTxDetector.Settings.JobSettings;
 using Lykke.Job.ChainalysisTxDetector.Services;
 using Lykke.SettingsReader;
 using Lykke.Job.ChainalysisTxDetector.RabbitSubscribers;
+using Lykke.Job.ChainalysisTxDetector.AzureRepositories;
+using AzureStorage.Tables;
+using Lykke.Job.ChainalysisTxDetector.Core.Domain;
 
 namespace Lykke.Job.ChainalysisTxDetector.Modules
 {
@@ -38,6 +41,16 @@ namespace Lykke.Job.ChainalysisTxDetector.Modules
             builder.RegisterInstance(_log)
                 .As<ILog>()
                 .SingleInstance();
+
+            builder.RegisterType<ChainalysisRepository>()
+                .As<IChainalysisRepository>()
+                .WithParameter(TypedParameter.From(AzureTableStorage<ChainalysisCash>.Create(_settingsManager.ConnectionString(x => x.Db.DataConnString), "ChainalyisTxCach", _log)))
+                .SingleInstance();
+
+            builder.RegisterType<ChainalysisTxService>()
+                .As<IChainalysisTxService>()
+                .SingleInstance();
+
 
             builder.RegisterType<HealthService>()
                 .As<IHealthService>()
