@@ -38,7 +38,10 @@ namespace Lykke.Job.ChainalysisTxDetector.RabbitSubscribers
             // about RabbitMq subscriber configuration
 
             var settings = RabbitMqSubscriptionSettings
-                .CreateForSubscriber(_connectionString, _exchangeName, "chainalysistxdetector");
+                .CreateForSubscriber(_connectionString, _exchangeName, "chinalysiscash");
+            settings.IsDurable = true;
+
+
             // TODO: Make additional configuration, using fluent API here:
             // ex: .MakeDurable()
 
@@ -47,6 +50,7 @@ namespace Lykke.Job.ChainalysisTxDetector.RabbitSubscribers
                         retryTimeout: TimeSpan.FromSeconds(10),
                         next: new DeadQueueErrorHandlingStrategy(_log, settings)))
                 .SetMessageDeserializer(new JsonMessageDeserializer<ChainalisysCashMessage>())
+                .SetMessageReadStrategy(new MessageReadQueueStrategy())
                 .Subscribe(ProcessMessageAsync)
                 .CreateDefaultBinding()
                 .SetLogger(_log)
