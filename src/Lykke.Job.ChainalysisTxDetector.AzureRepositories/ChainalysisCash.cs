@@ -32,6 +32,6 @@ namespace Lykke.Job.ChainalysisTxDetector.AzureRepositories
         public string BtcTransactionHash { get=>_btcTransactionHash; set { _btcTransactionHash = value; UpdateRowKey(); } }
         public string WalletAddress { get=>PartitionKey; set=>PartitionKey = value; }
         public int OutputNumber { get => _outputNumber; set { _outputNumber = value; UpdateRowKey(); } }
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
     }
 }
