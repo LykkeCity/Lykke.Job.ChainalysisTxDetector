@@ -9,22 +9,25 @@ using Lykke.SettingsReader;
 using Lykke.Job.ChainalysisTxDetector.AzureRepositories;
 using AzureStorage.Tables;
 using Lykke.Job.ChainalysisTxDetector.Core.Domain;
+using Lykke.Job.ChainalysisTxDetector.Settings;
 
 namespace Lykke.Job.ChainalysisTxDetector.Modules
 {
     public class JobModule : Module
     {
-        private readonly ChainalysisTxDetectorSettings _settings;
+        private readonly AppSettings _settings;
         private readonly IReloadingManager<ChainalysisTxDetectorSettings> _settingsManager;
         private readonly ILog _log;
         // NOTE: you can remove it if you don't need to use IServiceCollection extensions to register service specific dependencies
         private readonly IServiceCollection _services;
 
-        public JobModule(IReloadingManager<ChainalysisTxDetectorSettings> settingsManager, ILog log)
+
+        public JobModule(IReloadingManager<AppSettings> settingsManager, ILog log)
         {
             _settings = settingsManager.CurrentValue;
             _log = log;
-            _settingsManager = settingsManager;
+
+            _settingsManager = settingsManager.Nested(x => x.ChainalysisTxDetectorJob);
 
             _services = new ServiceCollection();
         }
@@ -47,6 +50,8 @@ namespace Lykke.Job.ChainalysisTxDetector.Modules
                 .SingleInstance();
 
             builder.RegisterType<ChainalysisTxService>()
+                   .WithParameter("ninjaUrl", _settings.TxDetectorJob.Ninja.Url)
+                   .WithParameter("isMainNetwork", _settings.TxDetectorJob.Ninja.IsMainNet)
                 .As<IChainalysisTxService>()
                 .SingleInstance();
 

@@ -16,7 +16,6 @@ namespace Lykke.Job.ChainalysisTxDetector.Settings
 
         public TxDetectorJobSettings TxDetectorJob { get; set; }
 
-        public NinjaSettings NinjaHost { get; set; }
     }
 
 

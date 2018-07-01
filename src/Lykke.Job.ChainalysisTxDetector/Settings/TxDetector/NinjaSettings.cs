@@ -1,6 +1,6 @@
 ﻿using Lykke.SettingsReader.Attributes;
 
-namespace Lykke.Job.ChainalysisTxDetector.Settings.JobSettings
+namespace Lykke.Job.ChainalysisTxDetector.Settings.TxDetector
 {
     public class NinjaSettings
     {
