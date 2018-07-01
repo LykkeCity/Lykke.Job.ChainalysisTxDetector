@@ -6,6 +6,6 @@ namespace Lykke.Job.ChainalysisTxDetector.Core.Services
 {
     public interface IChainalysisTxService
     {
-        Task<bool> StoreRecord(IChainalysisCash row);
+        Task ProccedAsync(IChainalysisTxEvent row);
     }
 }

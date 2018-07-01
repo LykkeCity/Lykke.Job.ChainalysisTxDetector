@@ -1,5 +1,6 @@
 ﻿using Lykke.Job.ChainalysisTxDetector.Settings.JobSettings;
 using Lykke.Job.ChainalysisTxDetector.Settings.SlackNotifications;
+using Lykke.Job.ChainalysisTxDetector.Settings.TxDetector;
 using Lykke.SettingsReader.Attributes;
 
 namespace Lykke.Job.ChainalysisTxDetector.Settings
@@ -12,5 +13,11 @@ namespace Lykke.Job.ChainalysisTxDetector.Settings
 
         [Optional]
         public MonitoringServiceClientSettings MonitoringServiceClient { get; set; }
+
+        public TxDetectorJobSettings TxDetectorJob { get; set; }
+
+        public NinjaSettings NinjaHost { get; set; }
     }
+
+
 }
