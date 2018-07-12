@@ -45,7 +45,7 @@ namespace Lykke.Job.ChainalysisTxDetector.Modules
             var defaultRetryDelay = _settings.TxDetectorJob.RetryDelayInMilliseconds;
             builder.Register(ctx =>
             {
-                var projection = ctx.Resolve<ConfirmationSavedEvent>();
+                var projection = ctx.Resolve<ChainalysisTxProjection>();
 
                 return new CqrsEngine(
                     _log,
@@ -58,10 +58,10 @@ namespace Lykke.Job.ChainalysisTxDetector.Modules
 
                     Register.BoundedContext("chainalysis")
                         .ListeningEvents(typeof(ConfirmationSavedEvent))
-                        .From("transactions").On("transactions-commands")
-                        .WithProjection(projection, "transfer")
+                        .From("transactions").On("transactions-events")
+                        .WithProjection(projection, "transactions")
                 );
-            }).As<ICqrsEngine>().SingleInstance();
+            }).As<ICqrsEngine>().SingleInstance().AutoActivate();
             
         }
     }

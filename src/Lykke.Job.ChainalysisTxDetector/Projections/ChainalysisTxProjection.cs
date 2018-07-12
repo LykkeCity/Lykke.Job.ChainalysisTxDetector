@@ -25,11 +25,8 @@ namespace Lykke.Job.ChainalysisTxDetector.Projections
         public async Task Handle(ConfirmationSavedEvent evt)
         {
 
-            _log.WriteInfo (nameof(ChainalysisTxProjection), nameof(ConfirmationSavedEvent), evt.ToJson());
-
             await _chainalysisTxService.ProccedAsync(evt);
             ChaosKitty.Meow();
-
            
         }
     }
