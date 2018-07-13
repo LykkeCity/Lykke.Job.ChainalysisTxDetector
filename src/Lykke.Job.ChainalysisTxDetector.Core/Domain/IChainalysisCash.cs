@@ -7,6 +7,9 @@ namespace Lykke.Job.ChainalysisTxDetector.Core.Domain
         string BtcTransactionHash { get; set; }
         string WalletAddress { get; set; }
         int OutputNumber { get; set; }
-        decimal Amount { get; set; }
+        string Amount { get; set; }
+        string ChainalysisScore { get; set; }
+        string ChainalysisName { get; set; }
+        string ChainalysisCategory { get; set; }
     }
 }

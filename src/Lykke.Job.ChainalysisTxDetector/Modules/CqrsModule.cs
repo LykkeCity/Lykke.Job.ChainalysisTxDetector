@@ -56,7 +56,7 @@ namespace Lykke.Job.ChainalysisTxDetector.Modules
                     Register.DefaultEndpointResolver(new RabbitMqConventionEndpointResolver("RabbitMq", "protobuf", environment: _settings.TxDetectorJob.Environment)),
 
 
-                    Register.BoundedContext("chainalysis")
+                    Register.BoundedContext("chainalysis-test")
                         .ListeningEvents(typeof(ConfirmationSavedEvent))
                         .From("transactions").On("transactions-events")
                         .WithProjection(projection, "transactions")
