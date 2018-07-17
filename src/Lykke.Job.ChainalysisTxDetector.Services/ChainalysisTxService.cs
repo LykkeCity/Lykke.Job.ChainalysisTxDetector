@@ -5,6 +5,8 @@ using Common;
 using Common.Log;
 using Lykke.Job.ChainalysisTxDetector.Core.Domain;
 using Lykke.Job.ChainalysisTxDetector.Core.Services;
+using Lykke.Service.ChainalysisProxy.Client;
+using Lykke.Service.ChainalysisProxy.Contracts;
 using NBitcoin;
 using QBitNinja.Client;
 
@@ -13,15 +15,21 @@ namespace Lykke.Job.ChainalysisTxDetector.Services
     public class ChainalysisTxService : IChainalysisTxService
     {
         private readonly IChainalysisRepository _chainalysisRepository;
+        private readonly IChainalysisProxyClient _client;
         private readonly ILog _log;
         private readonly QBitNinjaApiCaller _ninjaClient;
         private readonly Network _ninjaNetwork;
-        public ChainalysisTxService(IChainalysisRepository chainalysisRepository, string ninjaUrl, bool isMainNetwork, ILog log)
+        public ChainalysisTxService(IChainalysisRepository chainalysisRepository,
+                                    string ninjaUrl,
+                                    bool isMainNetwork,
+                                    IChainalysisProxyClient client,
+                                    ILog log)
         {
             _chainalysisRepository = chainalysisRepository ?? throw new ArgumentNullException(nameof(chainalysisRepository));
             _log = log ?? throw new ArgumentNullException(nameof(log));
             _ninjaNetwork = isMainNetwork ? Network.Main : Network.TestNet;
             _ninjaClient = new QBitNinjaApiCaller(() => new QBitNinjaClient(ninjaUrl, _ninjaNetwork));
+            _client = client ?? throw new ArgumentNullException(nameof(client));
            
         }
 
@@ -58,13 +66,22 @@ namespace Lykke.Job.ChainalysisTxDetector.Services
                     {
                         if (txEvent.Multisig.Equals(rec.TxOut.ScriptPubKey.GetDestinationAddress(_ninjaNetwork)?.ToString()))
                         {
+                            var chainalysisResult = await _client.AddTransaction(txEvent.ClientId, new NewTransactionModel
+                            {
+                                Transaction = txEvent.TransactionHash,
+                                Output = ((int)rec.Outpoint.N).ToString(),
+                                TransactionType = TransactionType.Reseived
+                            });
                             result.Add(new ChainalisysCashMessage
                             {
                                 LwClientId = txEvent.ClientId,
                                 BtcTransactionHash = txEvent.TransactionHash,
                                 WalletAddress = txEvent.Multisig,
                                 OutputNumber = (int)rec.Outpoint.N,
-                                Amount = rec.TxOut.Value.ToDecimal(MoneyUnit.BTC)
+                                Amount = rec.TxOut.Value.ToString(),
+                                ChainalysisName = chainalysisResult?.OutName,
+                                ChainalysisScore = chainalysisResult == null ? null : chainalysisResult.OutScore.ToString(),
+                                ChainalysisCategory = chainalysisResult?.OutCategory
                             });
                         }
                     }

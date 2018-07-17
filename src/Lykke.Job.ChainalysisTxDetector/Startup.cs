@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Lykke.Service.ChainalysisProxy.Client;
 
 namespace Lykke.Job.ChainalysisTxDetector
 {
@@ -64,6 +65,7 @@ namespace Lykke.Job.ChainalysisTxDetector
 
                 Log = CreateLogWithSlack(services, appSettings);
 
+                builder.RegisterChainalysisProxyClient(appSettings.Nested(x => x.ChainalysisProxyServiceClient).CurrentValue, Log);
                 builder.RegisterModule(new JobModule(appSettings, Log));
                 builder.RegisterModule(new CqrsModule(appSettings, Log));
 

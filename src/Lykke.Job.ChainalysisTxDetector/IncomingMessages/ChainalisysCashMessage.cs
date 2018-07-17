@@ -8,6 +8,9 @@ namespace Lykke.Job.ChainalysisTxDetector.IncomingMessages
         public string BtcTransactionHash { get; set; }
         public string WalletAddress { get; set; }
         public int OutputNumber { get; set; }
-        public decimal Amount { get; set; }
+        public string Amount { get; set; }
+        public string ChainalysisScore { get; set; }
+        public string ChainalysisName { get; set; }
+        public string ChainalysisCategory { get; set; }
     }
 }
