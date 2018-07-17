@@ -64,7 +64,8 @@ namespace Lykke.Job.ChainalysisTxDetector
 
                 Log = CreateLogWithSlack(services, appSettings);
 
-                builder.RegisterModule(new JobModule(appSettings.CurrentValue.ChainalysisTxDetectorJob, appSettings.Nested(x => x.ChainalysisTxDetectorJob), Log));
+                builder.RegisterModule(new JobModule(appSettings, Log));
+                builder.RegisterModule(new CqrsModule(appSettings, Log));
 
                 builder.Populate(services);
 

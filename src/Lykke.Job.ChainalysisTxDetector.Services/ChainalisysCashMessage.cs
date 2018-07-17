@@ -1,0 +1,13 @@
+﻿using Lykke.Job.ChainalysisTxDetector.Core.Domain;
+
+namespace Lykke.Job.ChainalysisTxDetector.Services
+{
+    public class ChainalisysCashMessage : IChainalysisCash
+    {
+        public string LwClientId { get; set; }
+        public string BtcTransactionHash { get; set; }
+        public string WalletAddress { get; set; }
+        public int OutputNumber { get; set; }
+        public decimal Amount { get; set; }
+    }
+}

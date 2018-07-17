@@ -6,23 +6,28 @@ using Lykke.Job.ChainalysisTxDetector.Core.Services;
 using Lykke.Job.ChainalysisTxDetector.Settings.JobSettings;
 using Lykke.Job.ChainalysisTxDetector.Services;
 using Lykke.SettingsReader;
-using Lykke.Job.ChainalysisTxDetector.RabbitSubscribers;
+using Lykke.Job.ChainalysisTxDetector.AzureRepositories;
+using AzureStorage.Tables;
+using Lykke.Job.ChainalysisTxDetector.Core.Domain;
+using Lykke.Job.ChainalysisTxDetector.Settings;
 
 namespace Lykke.Job.ChainalysisTxDetector.Modules
 {
     public class JobModule : Module
     {
-        private readonly ChainalysisTxDetectorSettings _settings;
+        private readonly AppSettings _settings;
         private readonly IReloadingManager<ChainalysisTxDetectorSettings> _settingsManager;
         private readonly ILog _log;
         // NOTE: you can remove it if you don't need to use IServiceCollection extensions to register service specific dependencies
         private readonly IServiceCollection _services;
 
-        public JobModule(ChainalysisTxDetectorSettings settings, IReloadingManager<ChainalysisTxDetectorSettings> settingsManager, ILog log)
+
+        public JobModule(IReloadingManager<AppSettings> settingsManager, ILog log)
         {
-            _settings = settings;
+            _settings = settingsManager.CurrentValue;
             _log = log;
-            _settingsManager = settingsManager;
+
+            _settingsManager = settingsManager.Nested(x => x.ChainalysisTxDetectorJob);
 
             _services = new ServiceCollection();
         }
@@ -39,6 +44,18 @@ namespace Lykke.Job.ChainalysisTxDetector.Modules
                 .As<ILog>()
                 .SingleInstance();
 
+            builder.RegisterType<ChainalysisRepository>()
+                .As<IChainalysisRepository>()
+                .WithParameter(TypedParameter.From(AzureTableStorage<ChainalysisCash>.Create(_settingsManager.ConnectionString(x => x.Db.DataConnString), "ChainalyisTxCach", _log)))
+                .SingleInstance();
+
+            builder.RegisterType<ChainalysisTxService>()
+                   .WithParameter("ninjaUrl", _settings.TxDetectorJob.Ninja.Url)
+                   .WithParameter("isMainNetwork", _settings.TxDetectorJob.Ninja.IsMainNet)
+                .As<IChainalysisTxService>()
+                .SingleInstance();
+
+
             builder.RegisterType<HealthService>()
                 .As<IHealthService>()
                 .SingleInstance();
@@ -49,23 +66,12 @@ namespace Lykke.Job.ChainalysisTxDetector.Modules
             builder.RegisterType<ShutdownManager>()
                 .As<IShutdownManager>();
 
-            RegisterRabbitMqSubscribers(builder);
 
             // TODO: Add your dependencies here
 
             builder.Populate(_services);
         }
 
-        private void RegisterRabbitMqSubscribers(ContainerBuilder builder)
-        {
-            // TODO: You should register each subscriber in DI container as IStartable singleton and autoactivate it
 
-            builder.RegisterType<MyRabbitSubscriber>()
-                .As<IStartable>()
-                .AutoActivate()
-                .SingleInstance()
-                .WithParameter("connectionString", _settings.Rabbit.ConnectionString)
-                .WithParameter("exchangeName", _settings.Rabbit.ExchangeName);
-        }
     }
 }
