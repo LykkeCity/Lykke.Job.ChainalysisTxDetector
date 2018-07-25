@@ -34,7 +34,7 @@
     "MatchingEngine": {
       "IpEndpoint": {
         "Host": "${SpotMeInternalHost}",
-        "Port": 8888
+        "Port": ${SpotMeInternalPort}
       }
     },
     "AssetsCache": {
@@ -45,7 +45,7 @@
       "Url": "${QBitNinjaAddress}"
     },
     "Notifications": {
-      "HubConnectionString": "{HubConnectionString}",
+      "HubConnectionString": "${HubConnectionString}",
       "HubName": "lykke-notifications-dev"
     },
     "ProcessInParallelCount": 8,
