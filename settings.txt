@@ -21,8 +21,8 @@
     "ThrottlingLimitSeconds": ${SlackNotificationsThrottlingLimit}
   },
   "ChainalysisProxyServiceClient": {
-    "ServiceUrl": "{ChainalysisProxyServiceClientUrl}",
-    "Timeout": {ClientTimeoutDefender}
+    "ServiceUrl": "${ChainalysisProxyServiceClientUrl}",
+    "Timeout": ${ClientTimeoutDefender}
   },
   "TxDetectorJob": {
     "Db": {
@@ -41,7 +41,7 @@
       "ExpirationPeriod": "00:05:00"
     },
     "Ninja": {
-      "IsMainNet": false,
+      "IsMainNet": ${QBitNinjaIsMain},
       "Url": "${QBitNinjaAddress}"
     },
     "Notifications": {
