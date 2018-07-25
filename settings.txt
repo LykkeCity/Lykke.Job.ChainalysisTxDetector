@@ -1,0 +1,61 @@
+﻿{
+    "ChainalysisTxDetectorJob": {
+    "Db": {
+      "LogsConnString": "${ChainalysisLogsConnString}:[AzureTableStorage]",
+      "DataConnString": "${ChainalysisConnString}:[AzureTableStorage]"
+    },
+    "Rabbit": {
+      "ConnectionString": "${CqrsRabbitConnString}:[RabbitMq]",
+      "ExchangeName": "chainalysistxdetector"
+    }
+  },
+  "MonitoringServiceClient": {
+    "MonitoringServiceUrl": "${MonitoringServiceUrl}"
+  },
+
+  "SlackNotifications": {
+    "AzureQueue": {
+      "ConnectionString": "${SlackNotificationsConnString}:[AzureTableStorage]",
+      "QueueName": "slack-notifications"
+    },
+    "ThrottlingLimitSeconds": ${SlackNotificationsThrottlingLimit}
+  },
+  "ChainalysisProxyServiceClient": {
+    "ServiceUrl": "${ChainalysisProxyServiceClientUrl}",
+    "Timeout": ${ClientTimeoutDefender}
+  },
+  "TxDetectorJob": {
+    "Db": {
+      "LogsConnString": "${TxDetectorJobLogsConnString}",
+      "BitCoinQueueConnectionString": "${BitCoinQueueConnectionString}:[AzureTableStorage]",
+      "ClientPersonalInfoConnString": "${PersonalInfoConnString}:[AzureTableStorage]",
+      "HTradesConnString": "${HTradesConnString}:[AzureTableStorage]"
+    },
+    "MatchingEngine": {
+      "IpEndpoint": {
+        "Host": "${SpotMeInternalHost}",
+        "Port": ${SpotMeInternalPort}
+      }
+    },
+    "AssetsCache": {
+      "ExpirationPeriod": "00:05:00"
+    },
+    "Ninja": {
+      "IsMainNet": ${QBitNinjaIsMain},
+      "Url": "${QBitNinjaAddress}"
+    },
+    "Notifications": {
+      "HubConnectionString": "${HubConnectionString}",
+      "HubName": "lykke-notifications-dev"
+    },
+    "ProcessInParallelCount": 8,
+    "TxDetectorConfirmationsLimit": 1,
+    "RetryDelayInMilliseconds": 3000,
+    "ChaosKitty": {
+      "StateOfChaos": "0.0"
+    },
+    "RabbitMQConnectionString": "${CqrsRabbitConnString}:[RabbitMq]",
+    "Environment": "lykke.tx-detector",
+    "ChainalysisExchange": "chainalysistxdetector"
+  }
+}
