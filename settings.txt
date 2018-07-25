@@ -45,7 +45,7 @@
       "Url": "${QBitNinjaAddress}"
     },
     "Notifications": {
-      "HubConnectionString": "{HubConnectionString}:[AzureTableStorage]",
+      "HubConnectionString": "{HubConnectionString}",
       "HubName": "lykke-notifications-dev"
     },
     "ProcessInParallelCount": 8,
