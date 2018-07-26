@@ -46,7 +46,7 @@
     },
     "Notifications": {
       "HubConnectionString": "${HubConnectionString}",
-      "HubName": "{HubName}"
+      "HubName": "${HubName}"
     },
     "ProcessInParallelCount": 8,
     "TxDetectorConfirmationsLimit": 1,
