@@ -42,11 +42,11 @@
     },
     "Ninja": {
       "IsMainNet": ${QBitNinjaIsMain},
-      "Url": "${QBitNinjaAddress}"
+      "Url": "${NinjaServiceUrl}"
     },
     "Notifications": {
       "HubConnectionString": "${HubConnectionString}",
-      "HubName": "lykke-notifications-dev"
+      "HubName": "{HubName}"
     },
     "ProcessInParallelCount": 8,
     "TxDetectorConfirmationsLimit": 1,
