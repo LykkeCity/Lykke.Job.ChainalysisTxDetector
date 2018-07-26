@@ -48,7 +48,7 @@
       "HubConnectionString": "${HubConnectionString}",
       "HubName": "${HubName}"
     },
-    "ProcessInParallelCount": 8,
+    "ProcessInParallelCount": 10,
     "TxDetectorConfirmationsLimit": 1,
     "RetryDelayInMilliseconds": 3000,
     "ChaosKitty": {
