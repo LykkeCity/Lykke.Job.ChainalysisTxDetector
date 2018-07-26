@@ -46,7 +46,7 @@
     },
     "Notifications": {
       "HubConnectionString": "${HubConnectionString}",
-      "HubName": "{HubName}"
+      "HubName": "${HubName}"
     },
     "ProcessInParallelCount": 8,
     "TxDetectorConfirmationsLimit": 1,
@@ -55,7 +55,6 @@
       "StateOfChaos": "0.0"
     },
     "RabbitMQConnectionString": "${CqrsRabbitConnString}:[RabbitMq]",
-    "Environment": "lykke.tx-detector",
-    "ChainalysisExchange": "chainalysistxdetector"
+    "Environment": "lykke.tx-detector"
   }
 }
