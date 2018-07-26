@@ -55,7 +55,6 @@
       "StateOfChaos": "0.0"
     },
     "RabbitMQConnectionString": "${CqrsRabbitConnString}:[RabbitMq]",
-    "Environment": "lykke.tx-detector",
-    "ChainalysisExchange": "chainalysistxdetector"
+    "Environment": "lykke.tx-detector"
   }
 }
